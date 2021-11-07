@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
 import SignupPage from '../SignupPage/SignupPage';
 import LoginPage from '../LoginPage/LoginPage';
 import userService from '../../utils/userService'
+import Home from '../Home/Home';
+import NavBar from '../../components/NavBar/NavBar';
 
 
 function App() {
@@ -12,25 +14,29 @@ function App() {
   // this object corresponds to the jwt payload which is defined in the server signup or login function that looks like 
   // this  const token = createJWT(user); // where user was the document we created from mongo
 
-  function handleSignUpOrLogin(){
+  function handleSignUpOrLogin() {
     setUser(userService.getUser()) // getting the user from localstorage decoding the jwt
   }
 
-  function handleLogout(){
+  function handleLogout() {
     userService.logout();
-    setUser({user: null})
+    setUser({ user: null })
   }
 
   return (
     <div className="App">
+      <NavBar />
       <Switch>
-          <Route exact path="/login">
-             <LoginPage handleSignUpOrLogin={handleSignUpOrLogin}/>
-          </Route>
-          <Route exact path="/signup">
-             <SignupPage handleSignUpOrLogin={handleSignUpOrLogin}/>
-          </Route>
-          {userService.getUser() ? 
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route exact path="/login">
+          <LoginPage handleSignUpOrLogin={handleSignUpOrLogin} />
+        </Route>
+        <Route exact path="/signup">
+          <SignupPage handleSignUpOrLogin={handleSignUpOrLogin} />
+        </Route>
+        {/* {userService.getUser() ? 
             <> 
              <Switch>
                 <Route exact path="/">
@@ -40,8 +46,8 @@ function App() {
             </>
             :
             <Redirect to='/login'/>
-          }
-  
+          } */}
+
       </Switch>
     </div>
   );
